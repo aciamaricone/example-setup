@@ -1,0 +1,3 @@
+Replace with client project name (unique but standardized)
+Replace with hub project name
+Replace with folder ID for client project
