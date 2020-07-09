@@ -8,12 +8,12 @@ export ORG_ID=`gcloud organizations list | grep $DOMAIN | awk '{print $2}'`
 
 #Create Shared Services Folder
 gcloud alpha resource-manager folders create \
---display-name=$SHARED_SERVICES_FOLDER
+--display-name=$SHARED_SERVICES_FOLDER \
 --organization=$ORG_ID
 
 #Create Client Folder
 gcloud alpha resource-manager folders create \
---display-name=$CLIENT_FOLDER
+--display-name=$CLIENT_FOLDER \
 --organization=$ORG_ID
 
 #Store Folder IDs
