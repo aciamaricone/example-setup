@@ -1,3 +1,7 @@
-Replace with client project name (unique but standardized)
-Replace with hub project name
-Replace with folder ID for client project
+Replace this line with domain (google.com)
+Replace this line with Shared Services Folder name
+Replace this line with Client Folder name
+Replace this line with Hub Project name
+Replace this line with Client Project name
+Replace this line with Billing ID
+Replace this line with POC user email address
