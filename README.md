@@ -1,10 +1,14 @@
 # UDL-POC
 
+# TO DO
+Manually deploy Qubole (can automate with Terraform in the future however, in order to ensure free deployment, manual marketplace selection is optimal for POC)
+Create firewall rules for each VPC
+
 ## Setup Steps
 1) Create two projects: one hub, one client
 2) Create individual VPCs for each project
 3) In hub project, create GKE cluster and container registry
-4) In client project, create storage buckets and manually deploy Qubole (can automate with Terraform in the future however, in order to ensure free deployment, manual marketplace selection is optimal for POC)
+4) In client project, create storage buckets
 
 ## Setup Script
 In order to create the necessary POC environments, you can either execute the total script for complete creation or individual scripts.
