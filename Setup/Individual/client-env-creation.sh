@@ -4,6 +4,7 @@ CLIENT_PROJECT=$1
 # Enable appropriate product APIs
 gcloud config set project $CLIENT_PROJECT
 gcloud services enable \
+bigquery.googleapis.com \
 compute.googleapis.com \
 pubsub.googleapis.com \
 storage-api.googleapis.com \
