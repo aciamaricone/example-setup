@@ -4,4 +4,4 @@ Replace this line with Client Folder name
 Replace this line with Hub Project name
 Replace this line with Client Project name
 Replace this line with Billing ID
-Replace this line with POC user email address
+Replace this line with POC user email address (ensure it is in the same domain as the first line)
