@@ -100,6 +100,7 @@ clusters create $HUB_PROJECT_CLUSTER \
 --image-type "COS" \
 --disk-type "pd-standard" \
 --disk-size "100" \
+--node-labels env=prod
 --metadata disable-legacy-endpoints=true \
 --scopes "https://www.googleapis.com/auth/cloud-platform" \
 --num-nodes "3" \
