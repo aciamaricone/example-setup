@@ -37,6 +37,7 @@ gcloud compute networks subnets create $CLIENT_PROJECT_SUBNET \
 RAW_SB="$CLIENT_PROJECT"_raw
 TRUSTED_SB="$CLIENT_PROJECT"_trusted
 ACTIVATED_SB="$CLIENT_PROJECT"_activated
+QUBOLE_SB="$CLIENT_PROJECT"_qubole
 
 gsutil mb -l us-central1 -b on -p $CLIENT_PROJECT gs://$RAW_SB
 gsutil versioning set on gs://$RAW_SB
@@ -46,3 +47,6 @@ gsutil versioning set on gs://$TRUSTED_SB
 
 gsutil mb -l us-central1 -b on -p $CLIENT_PROJECT gs://$ACTIVATED_SB
 gsutil versioning set on gs://$ACTIVATED_SB
+
+gsutil mb -l us-central1 -b on -p $CLIENT_PROJECT gs://$QUBOLE_SB
+gsutil versioning set on gs://$QUBOLE_SB
