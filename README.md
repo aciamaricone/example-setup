@@ -1,16 +1,67 @@
 # UDL-POC
-You have the option to use gcloud commands or Terraform commands in an existing project (assuming existing organization admin role). Both should be run in the Cloud Shell due to existing SDK and CLI tools.
 
-# TO DO
-GCLOUD
-Qubole deployment scripts
-Create firewall rules for each VPC 
+## Setup Steps
+1) Create two folders: one shared services, one client
+2) Create two projects: one hub, one client
+3) Create individual VPCs for each project
+4) In hub project, create a VPC, a GKE cluster, and a BigQuery dataset
+5) In client project, create a VPC, storage buckets
+6) Create Qubole Master Account via GCP marketplace
+7) Create necessary VPC firewall rules
 
-TERRAFORM
-Create Terraform scripts
+## Setup Script
+In order to create the necessary POC environments, you can either execute the total script for complete creation or individual scripts.
+```
+Folder creation -> Project creation -> IAM creation -> Hub environment creation -> Client environment creation
+```
 
-## Gcloud Setup
-In gcloud setup, two folders (one shared services, one client specific) will be created. These folders will then hold one project each (hub project, client specific project). A specified user will be granted project owner role on both projects. Within the hub project, a VPC and GKE cluster (with a BigQuery dataset for usage metering) will be created while in the client project, several GCS buckets and a Qubole deployment will be created.
+### Setup Script
+This script will create all tasks detailed below in individual scripts
+```
+./setup.sh $(cat setup-arguments.txt)
+```
+Update setup-arguments.txt with appropriate arguments
 
-## Terraform Setup 
-In the Terraform setup, the same actions as the gcloud setup will be completed, in addition to the creation of a Terraform admin project. This will enable the creation of the above steps, through an authenticated service account, and future environment creation.
+## Individual Scripts
+### Folder Creation Script
+This script will create the folders, underneath an existing organization node, for project organization
+```
+./folder-creation.sh <domain> <shared services folder name> <client folder name>
+```
+Domain - Supply the complete domain (example: google.com)
+Shared Services Folder Name - Supply a name for a folder to hold all shared services projects (keep in mind you can only use letters, numbers, single quotes, hyphens, spaces, underscores)
+Client Folder Name - Supply a name for a folder that will hold all Client projects related to their UDL environments (keep in mind you can only use letters, numbers, single quotes, hyphens, spaces, underscores)
+
+### Project Creation Script
+This script will create projects within the newly created folders
+```
+./project-creation.sh <shared services folder name> <client folder name> <hub project name> <client project name> <billing account ID>
+```
+Shared Services Folder Name - Utilize recently created Folder name, which will automatically capture the Folder ID
+Client Folder Name - Utilize recently created Folder name, which will automatically capture the Folder ID
+Hub Project Name - Supply a name for UDL hub project (keep in mind you must start with a letter and can only use lowercase letters, numbers, single quotes, hyphens, spaces or exclamation points)
+Client Project Name - Supply a name for the client UDL project (keep in mind you must start with a letter and can only use lowercase letters, numbers, single quotes, hyphens, spaces or exclamation points)
+Billing Account ID - Provide billing account ID to assign to new projects (example: 01AFB2-4DK3DJ-141029)
+
+### IAM Creation Script
+This script will provision broad IAM privileges to POC user in both projects
+```
+./iam-creation.sh <user email address> <hub project name> <client project name>
+```
+User Email Address - Supply an email address, within company domain, for appropriate IAM role allocation
+Hub Project Name - Utilize recently created Hub Project name
+Client Project Name - Utilize recently created Client Project name
+
+### Hub Environment Creation Script
+This script will enable the appropriate product APIs and create a custom VPC, a Google Kubernetes Engine cluster, and a BigQuery dataset for GKE usage metrics
+```
+./hub-env-creation.sh <hub project name>
+```
+Hub Project Name - Utilize recently created Hub Project name
+
+### Client Environment Creation Script
+This script will enable the appropriate product APIs and create a custom VPC along with the necessary Cloud Storage buckets.
+```
+./client-env-creation.sh <client project name>
+```
+Client Project Name - Utilize recently created Client Project name
