@@ -3,6 +3,7 @@
 ## TO DO
 Create firewall rules for VPN ingress
 Include IAM conditions
+Continuous deployment for GKE from GCR
 
 ## FUTURE IMPROVEMENTS
 Separate projects for anonymous and known data
