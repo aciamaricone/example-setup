@@ -1,12 +1,8 @@
 # UDL-POC
 
 ## TO DO
-Call IP gcloud to get ip addres for static IP
-Need the startup script for the bastion host (for assignment of the static IP)
-https://aws.amazon.com/quickstart/architecture/linux-bastion/
-https://docs.aws.amazon.com/quickstart/latest/linux-bastion/welcome.html 
-
-Need to assign IAM role by GCS tag - IAM conditions
+Create firewall rules for VPN ingress
+Include IAM conditions
 
 ## FUTURE IMPROVEMENTS
 Separate projects for anonymous and known data

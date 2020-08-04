@@ -1,0 +1,79 @@
+Call IP gcloud to get ip addres for static IP
+Need the startup script for the bastion host (for assignment of the static IP)
+https://aws.amazon.com/quickstart/architecture/linux-bastion/
+https://docs.aws.amazon.com/quickstart/latest/linux-bastion/welcome.html 
+
+##### https://stackoverflow.com/questions/58138006/how-to-reuse-static-ip-address-on-google-cloud-compute-engine-from-command-line
+
+gcloud compute instance-templates create $CLIENT_1_INSTANCE_TEMPLATE \
+--machine-type=n2-standard-2 \
+--subnet=projects/$HUB_PROJECT/regions/$REGION/subnetworks/$CLIENT_1_PROJECT_SUBNET \
+--no-address \
+--maintenance-policy=MIGRATE \
+--service-account=$CLIENT_1_COMPUTE_SA \
+--scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append \
+--region=$USC_REGION \
+--tags=gcp-bastion \
+--image=centos-7-v20200714 \
+--image-project=centos-cloud \
+--boot-disk-size=20GB \
+--boot-disk-type=pd-standard \
+--boot-disk-device-name=$CLIENT_1_INSTANCE_TEMPLATE \
+--shielded-secure-boot \
+--shielded-vtpm \
+--shielded-integrity-monitoring \
+--reservation-affinity=any
+
+
+gcloud compute health-checks create tcp $CLIENT_1_MIG_HEALTHCHECK \
+--global \
+--timeout "5" \
+--check-interval "10" \
+--unhealthy-threshold "3" \
+--healthy-threshold "2" \
+--port "80"
+
+gcloud compute instance-groups managed create $CLIENT_1_INSTANCE_GROUP \
+--template=$CLIENT_1_INSTANCE_TEMPLATE \
+--zones=us-central1-b,us-central1-c \
+--size=1 \
+--instance-redistribution-type=PROACTIVE \
+--health-check=$CLIENT_1_MIG_HEALTHCHECK \
+--initial-delay=300
+
+gcloud compute instance-groups managed set-autoscaling $CLIENT_1_INSTANCE_GROUP \
+--region=$REGION \
+--cool-down-period "60" \
+--max-num-replicas "1" \
+--min-num-replicas "1" \
+--target-cpu-utilization "0.9" \
+--mode "on"
+
+gcloud compute health-checks create tcp $CLIENT_1_LB_HEALTHCHECK \
+--global \
+--timeout "5" \
+--check-interval "10" \
+--unhealthy-threshold "3" \
+--healthy-threshold "2" \
+--port "80"
+
+gcloud compute backend-services create $CLIENT_1_BACKEND \
+--protocol TCP \
+--global \
+--health-checks $CLIENT_1_LB_HEALTHCHECK
+
+gcloud compute backend-services add-backend $CLIENT_1_BACKEND \
+--global \
+--instance-group $CLIENT_1_INSTANCE_GROUP \
+--instance-group-region=$REGION \
+--balancing-mode UTILIZATION \
+--max-utilization 0.8
+
+gcloud compute addresses create $CLIENT_1_BASTION_IP \
+--global \
+--ip-version=IPV4
+
+gcloud compute forwarding-rules create $CLIENT_1_FORWARD_RULE_1 \
+--global \
+--address=$CLIENT_1_BASTION_IP \
+--ports=22

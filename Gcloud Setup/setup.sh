@@ -9,13 +9,11 @@ CLIENT_2_PROJECT=udl-core-sandbox-2
 BILLING_ID=0111B9-D0C0B2-04DD65
 USER1=blake.reed@acxiom.com
 
-HUB_PROJECT=general-272722
-
 # Variables
 HUB_PROJECT_VPC="$HUB_PROJECT"-vpc
 HUB_PROJECT_SUBNET="$HUB_PROJECT"-central-subnet
 HUB_PROJECT_SUBNET_RANGE=10.1.0.0/21
-USE_REGION=us-east4
+USE_REGION=us-east1
 EUW_REGION=europe-west1
 
 CLIENT_1_PROJECT_SUBNET="$CLIENT_1_PROJECT"-central-subnet
@@ -46,7 +44,7 @@ CLIENT_1_BASTION_IP="$CLIENT_1_PROJECT"-bastion-ip
 CLIENT_2_BASTION_IP="$CLIENT_2_PROJECT"-bastion-ip
 CLIENT_1_BASTION="$CLIENT_1_PROJECT"-bastion
 CLIENT_2_BASTION="$CLIENT_2_PROJECT"-bastion
-USE_ZONE=us-east4-b
+USE_ZONE=us-east1-b
 EUW_REGION=europe-west1-b
 CLIENT_1_BASTION_SA="$CLIENT_1_PROJECT"-bastion-sa
 CLIENT_2_BASTION_SA="$CLIENT_2_PROJECT"-bastion-sa
@@ -214,7 +212,7 @@ gcloud container --project $HUB_PROJECT clusters create $HUB_PROJECT_CLUSTER \
 --image-type "COS" \
 --disk-type "pd-standard" \
 --disk-size "100" \
---node-labels env=prod \
+--node-labels env=poc \
 --metadata disable-legacy-endpoints=true \
 --service-account "$GKE_SA_FULL" \
 --scopes "https://www.googleapis.com/auth/cloud-platform" \
@@ -245,7 +243,7 @@ gcloud container --project $HUB_PROJECT clusters create $HUB_PROJECT_CLUSTER \
 --enable-shielded-nodes \
 --shielded-secure-boot
 
-# Create Google Cloud Storage buckets for Client Project
+# Create Google Cloud Storage buckets for Client Projects
 # https://cloud.google.com/storage/docs/creating-buckets#storage-create-bucket-gsutil
 gsutil mb -l us-central1 -b on -p $CLIENT_1_PROJECT gs://$CLIENT_1_RAW_SB
 gsutil versioning set on gs://$CLIENT_1_RAW_SB
@@ -324,7 +322,7 @@ gcloud compute --project=$CLIENT_1_PROJECT firewall-rules create "bastion-ingres
 --source-ranges=34.73.1.130/32 \
 --target-tags=bastion
 
-gcloud compute --project=$CLIENT_1_PROJECT firewall-rules create "bastion-VPC-ingress-7000" \
+gcloud compute --project=$CLIENT_1_PROJECT firewall-rules create "bastion-vpc-ingress-7000" \
 --direction=INGRESS \
 --priority=1000 \
 --network=$HUB_PROJECT_VPC \
@@ -373,7 +371,7 @@ gcloud compute --project=$CLIENT_2_PROJECT firewall-rules create "bastion-ingres
 --source-ranges=34.73.1.130/32 \
 --target-tags=bastion
 
-gcloud compute --project=$CLIENT_2_PROJECT firewall-rules create "bastion-VPC-ingress-7000" \
+gcloud compute --project=$CLIENT_2_PROJECT firewall-rules create "bastion-vpc-ingress-7000" \
 --direction=INGRESS \
 --priority=1000 \
 --network=$HUB_PROJECT_VPC \
@@ -381,82 +379,3 @@ gcloud compute --project=$CLIENT_2_PROJECT firewall-rules create "bastion-VPC-in
 --rules=tcp:7000 \
 --source-ranges=$CLIENT_2_PROJECT_SUBNET_RANGE \
 --target-tags=bastion
-
-##### https://stackoverflow.com/questions/58138006/how-to-reuse-static-ip-address-on-google-cloud-compute-engine-from-command-line
-
-gcloud compute instance-templates create $CLIENT_1_INSTANCE_TEMPLATE \
---machine-type=n2-standard-2 \
---subnet=projects/$HUB_PROJECT/regions/$REGION/subnetworks/$CLIENT_1_PROJECT_SUBNET \
---no-address \
---maintenance-policy=MIGRATE \
---service-account=$CLIENT_1_COMPUTE_SA \
---scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append \
---region=$USC_REGION \
---tags=gcp-bastion \
---image=centos-7-v20200714 \
---image-project=centos-cloud \
---boot-disk-size=20GB \
---boot-disk-type=pd-standard \
---boot-disk-device-name=$CLIENT_1_INSTANCE_TEMPLATE \
---shielded-secure-boot \
---shielded-vtpm \
---shielded-integrity-monitoring \
---reservation-affinity=any
-
-
-gcloud compute health-checks create tcp $CLIENT_1_MIG_HEALTHCHECK \
---global \
---timeout "5" \
---check-interval "10" \
---unhealthy-threshold "3" \
---healthy-threshold "2" \
---port "80"
-
-gcloud compute instance-groups managed create $CLIENT_1_INSTANCE_GROUP \
---template=$CLIENT_1_INSTANCE_TEMPLATE \
---zones=us-central1-b,us-central1-c \
---size=1 \
---instance-redistribution-type=PROACTIVE \
---health-check=$CLIENT_1_MIG_HEALTHCHECK \
---initial-delay=300
-
-gcloud compute instance-groups managed set-autoscaling $CLIENT_1_INSTANCE_GROUP \
---region=$REGION \
---cool-down-period "60" \
---max-num-replicas "1" \
---min-num-replicas "1" \
---target-cpu-utilization "0.9" \
---mode "on"
-
-gcloud compute health-checks create tcp $CLIENT_1_LB_HEALTHCHECK \
---global \
---timeout "5" \
---check-interval "10" \
---unhealthy-threshold "3" \
---healthy-threshold "2" \
---port "80"
-
-gcloud compute backend-services create $CLIENT_1_BACKEND \
---protocol TCP \
---global \
---health-checks $CLIENT_1_LB_HEALTHCHECK
-
-gcloud compute backend-services add-backend $CLIENT_1_BACKEND \
---global \
---instance-group $CLIENT_1_INSTANCE_GROUP \
---instance-group-region=$REGION \
---balancing-mode UTILIZATION \
---max-utilization 0.8
-
-gcloud compute addresses create $CLIENT_1_BASTION_IP \
---global \
---ip-version=IPV4
-
-gcloud compute forwarding-rules create $CLIENT_1_FORWARD_RULE_1 \
---global \
---address=$CLIENT_1_BASTION_IP \
---ports=22
-
-
-
-
