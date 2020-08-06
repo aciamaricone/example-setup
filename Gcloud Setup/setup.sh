@@ -1,15 +1,8 @@
-# Arguments
-DOMAIN=acxiom.com
-SHARED_SERVICES_FOLDER=shared_services
-CLIENT_1_FOLDER=client_1
-CLIENT_2_FOLDER=client_2
+# Variables
 HUB_PROJECT=udl-control-hub-phase1
 CLIENT_1_PROJECT=udl-core-sandbox-1
 CLIENT_2_PROJECT=udl-core-sandbox-2
-BILLING_ID=0111B9-D0C0B2-04DD65
-USER1=blake.reed@acxiom.com
 
-# Variables
 HUB_PROJECT_VPC="$HUB_PROJECT"-vpc
 HUB_PROJECT_SUBNET="$HUB_PROJECT"-central-subnet
 HUB_PROJECT_SUBNET_RANGE=10.1.0.0/21
@@ -50,74 +43,6 @@ CLIENT_1_BASTION_SA="$CLIENT_1_PROJECT"-bastion-sa
 CLIENT_2_BASTION_SA="$CLIENT_2_PROJECT"-bastion-sa
 CLIENT_1_BASTION_SA_FULL="$CLIENT_1_BASTION_SA@$CLIENT_1_PROJECT.iam.gserviceaccount.com"
 CLIENT_2_BASTION_SA_FULL="$CLIENT_2_BASTION_SA@$CLIENT_2_PROJECT.iam.gserviceaccount.com"
-
-CLIENT_1_INSTANCE_TEMPLATE="$CLIENT_1_PROJECT"-instance-template
-CLIENT_2_INSTANCE_TEMPLATE="$CLIENT_2_PROJECT"-instance-template
-CLIENT_1_INSTANCE_GROUP="$CLIENT_1_PROJECT"-mig
-CLIENT_2_INSTANCE_GROUP="$CLIENT_2_PROJECT"-mig
-CLIENT_1_MIG_HEALTHCHECK="$CLIENT_1_INSTANCE_GROUP"-healtcheck
-CLIENT_2_MIG_HEALTHCHECK="$CLIENT_2_INSTANCE_GROUP"-healtcheck
-CLIENT_1_LB="$CLIENT_1_PROJECT"-lb
-CLIENT_2_LB="$CLIENT_1_PROJECT"-lb
-CLIENT_1_LB_HEALTHCHECK="$CLIENT_1_LB"-healtcheck
-CLIENT_2_LB_HEALTHCHECK="$CLIENT_1_LB"-healtcheck
-CLIENT_1_BACKEND="$CLIENT_1_PROJECT"-backend
-CLIENT_2_BACKEND="$CLIENT_1_PROJECT"-backend
-CLIENT_1_FORWARD_RULE_1="$CLIENT_1_PROJECT"-forwarding-rule-1
-CLIENT_1_FORWARD_RULE_2="$CLIENT_1_PROJECT"-forwarding-rule-2
-CLIENT_2_FORWARD_RULE_1="$CLIENT_2_PROJECT"-forwarding-rule-1
-CLIENT_2_FORWARD_RULE_2="$CLIENT_2_PROJECT"-forwarding-rule-2
-
-# Store organization ID for use in folder creation
-ORG_ID=`gcloud organizations list | grep $DOMAIN | awk '{print $2}'`
-
-# Create Folders and store IDs
-# https://cloud.google.com/sdk/gcloud/reference/alpha/resource-manager/folders/list
-gcloud alpha resource-manager folders create \
---display-name=$SHARED_SERVICES_FOLDER \
---organization=$ORG_ID
-SHARED_SERVICES_FOLDER_ID=`gcloud alpha resource-manager folders list --organization=$ORG_ID | grep $SHARED_SERVICES_FOLDER | awk '{print $3}'`
-
-gcloud alpha resource-manager folders create \
---display-name=$CLIENT_1_FOLDER \
---organization=$ORG_ID
-CLIENT_1_FOLDER_ID=`gcloud alpha resource-manager folders list --organization=$ORG_ID | grep $CLIENT_1_PROJECT | awk '{print $3}'`
-
-gcloud alpha resource-manager folders create \
---display-name=$CLIENT_2_FOLDER \
---organization=$ORG_ID
-CLIENT_2_FOLDER_ID=`gcloud alpha resource-manager folders list --organization=$ORG_ID | grep $CLIENT_2_PROJECT | awk '{print $3}'`
-
-# Create Projects
-# https://cloud.google.com/sdk/gcloud/reference/projects/create
-gcloud projects create $HUB_PROJECT \
---folder=$SHARED_SERVICES_FOLDER_ID
-gcloud beta billing projects link $HUB_PROJECT --billing-account=$BILLING_ID
-HUB_PROJECT_ID=`gcloud projects list | grep $HUB_PROJECT | awk '{print $3}'`
-
-gcloud projects create $CLIENT_1_PROJECT \
---folder=$CLIENT_1_FOLDER_ID
-gcloud beta billing projects link $CLIENT_1_PROJECT --billing-account=$BILLING_ID
-CLIENT_1_PROJECT_ID=`gcloud projects list | grep $CLIENT_1_PROJECT | awk '{print $3}'`
-
-gcloud projects create $CLIENT_2_PROJECT \
---folder=$CLIENT_2_FOLDER_ID
-gcloud beta billing projects link $CLIENT_2_PROJECT --billing-account=$BILLING_ID
-CLIENT_2_PROJECT_ID=`gcloud projects list | grep $CLIENT_2_PROJECT | awk '{print $3}'`
-
-# Assign Project Owner roles in order to enable ease of use for evaluation
-# https://cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding
-gcloud projects add-iam-policy-binding $HUB_PROJECT_ID \
---member=user:$USER1 \
---role=roles/owner
-
-gcloud projects add-iam-policy-binding $CLIENT_1_PROJECT_ID \
---member=user:$USER1 \
---role=roles/owner
-
-gcloud projects add-iam-policy-binding $CLIENT_2_PROJECT_ID \
---member=user:$USER1 \
---role=roles/owner
 
 # Enable appropriate product APIs
 # https://cloud.google.com/endpoints/docs/openapi/enable-api
@@ -251,10 +176,10 @@ gsutil mb -l us-central1 -b on -p $CLIENT_1_PROJECT gs://$CLIENT_1_TRUSTED_SB
 gsutil versioning set on gs://$CLIENT_1_TRUSTED_SB
 gsutil mb -l us-central1 -b on -p $CLIENT_1_PROJECT gs://$CLIENT_1_ACTIVATED_SB
 gsutil versioning set on gs://$CLIENT_1_ACTIVATED_SB
-gsutil mb -l us-central1 -b on -p $CLIENT_1_PROJECT gs://$CLIENT_1_QUBOLE_SB
-gsutil versioning set on gs://$CLIENT_1_QUBOLE_SB
 gsutil mb -l us-central1 -b on -p $CLIENT_1_PROJECT gs://$CLIENT_1_EXTRACTION_SB
 gsutil versioning set on gs://$CLIENT_1_EXTRACTION_SB
+gsutil mb -l us-central1 -b on -p $CLIENT_1_PROJECT gs://$CLIENT_1_QUBOLE_SB
+gsutil versioning set on gs://$CLIENT_1_QUBOLE_SB
 
 gsutil mb -l us-central1 -b on -p $CLIENT_2_PROJECT gs://$CLIENT_2_RAW_SB_2
 gsutil versioning set on gs://$CLIENT_2_RAW_SB_2
@@ -262,10 +187,10 @@ gsutil mb -l us-central1 -b on -p $CLIENT_2_PROJECT gs://$CLIENT_2_TRUSTED_SB_2
 gsutil versioning set on gs://$CLIENT_2_TRUSTED_SB_2
 gsutil mb -l us-central1 -b on -p $CLIENT_2_PROJECT gs://$CLIENT_2_ACTIVATED_SB_2
 gsutil versioning set on gs://$CLIENT_2_ACTIVATED_SB_2
-gsutil mb -l us-central1 -b on -p $CLIENT_2_PROJECT gs://$CLIENT_2_QUBOLE_SB_2
-gsutil versioning set on gs://$CLIENT_2_QUBOLE_SB_2
 gsutil mb -l us-central1 -b on -p $CLIENT_2_PROJECT gs://$CLIENT_2_EXTRACTION_SB
 gsutil versioning set on gs://$CLIENT_2_EXTRACTION_SB
+gsutil mb -l us-central1 -b on -p $CLIENT_2_PROJECT gs://$CLIENT_2_QUBOLE_SB_2
+gsutil versioning set on gs://$CLIENT_2_QUBOLE_SB_2
 
 # Pull in images to Container Registry for Hub Project
 # https://medium.com/google-cloud/how-to-push-docker-image-to-google-container-registry-gcr-through-jenkins-job-52b9d5ce9f7f
