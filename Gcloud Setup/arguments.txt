@@ -1,0 +1,7 @@
+udl-control-hub-phase1
+udl-core-sandbox-1
+udl-core-sandbox-2
+us-east1
+europe-west1
+us-east1-b
+europe-west1-b

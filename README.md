@@ -1,9 +1,16 @@
 # UDL-POC
 
 ## TO DO
-Create firewall rules for VPN ingress
+VPN and Qubole ssh keys
+- Create startup scripts
+https://cloud.google.com/compute/docs/startupscript
+https://docs-gcp.qubole.com/en/latest/admin-guide/cluster-admin/private-subnet-gcp.html
+
 Include IAM conditions
+
 Continuous deployment for GKE from GCR
+- SA creation for multiple project access
+https://cloud.google.com/container-registry/docs/access-control
 
 ## FUTURE IMPROVEMENTS
 Separate projects for anonymous and known data

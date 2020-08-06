@@ -1,55 +1,19 @@
 # Variables
-HUB_PROJECT=udl-control-hub-phase1
-CLIENT_1_PROJECT=udl-core-sandbox-1
-CLIENT_2_PROJECT=udl-core-sandbox-2
-USER1=aciamaricone@google.com
-USE_REGION=us-east1
-EUW_REGION=europe-west1
-USE_ZONE=us-east1-b
-EUW_ZONE=europe-west1-b
-
-
-
-
-
-
-QUBOLE_CLIENT_1_SA="$CLIENT_1_PROJECT"-qubole-sa
-QUBOLE_CLIENT_1_SA_FULL="$QUBOLE_CLIENT_1_SA@$CLIENT_1_PROJECT.iam.gserviceaccount.com"
-QUBOLE_CLIENT_2_SA="$CLIENT_2_PROJECT"-qubole-sa
-QUBOLE_CLIENT_2_SA_FULL="$QUBOLE_CLIENT_2_SA@$CLIENT_1_PROJECT.iam.gserviceaccount.com"
-
-
-
-
-
-
-
-
-
-
-
-gcloud projects add-iam-policy-binding service-network-275814 \
---member=user:aciamaricone@google.com \
---role=roles/storage.objectViewer \
---condition=expression=[resource.name.startsWith`projects/service-network-275814/buckets/3456789132412841928479/objects/Screen`],title=[testingcondition]
-
-
-gsutil -m iam set 
-
-gcloud projects add-iam-policy-binding example-project-id-1 
---member='user:test-user@gmail.com' --role='roles/browser' 
---condition='expression=request.time <
-   timestamp("2019-01-01T00:00:00Z"),title=expires_end_of_2018,descrip  tion=Expires at midnight on 2018-12-31'
-
-
-
-
-
-
-
-
-
-
+HUB_PROJECT=$1
+CLIENT_1_PROJECT=$2
+CLIENT_2_PROJECT=$3
+USE_REGION=$4
+EUW_REGION=$5
+USE_ZONE=$6
+EUW_ZONE=$7
+CLIENT_1_BASTION_IP="$CLIENT_1_PROJECT"-bastion-ip
+CLIENT_2_BASTION_IP="$CLIENT_2_PROJECT"-bastion-ip
+CLIENT_1_BASTION="$CLIENT_1_PROJECT"-bastion
+CLIENT_2_BASTION="$CLIENT_2_PROJECT"-bastion
+CLIENT_1_BASTION_SA="$CLIENT_1_PROJECT"-bastion-sa
+CLIENT_2_BASTION_SA="$CLIENT_2_PROJECT"-bastion-sa
+CLIENT_1_BASTION_SA_FULL="$CLIENT_1_BASTION_SA@$CLIENT_1_PROJECT.iam.gserviceaccount.com"
+CLIENT_2_BASTION_SA_FULL="$CLIENT_2_BASTION_SA@$CLIENT_2_PROJECT.iam.gserviceaccount.com"
 
 # Create Bastion Hosts and TCP load balancer for Client Projects
 # https://cloud.google.com/sdk/gcloud/reference/compute/instance-groups/managed
@@ -195,7 +159,3 @@ gcloud compute --project=$HUB_PROJECT firewall-rules create "bastion-ingress-22-
 --rules=tcp:22 \
 --source-ranges=35.235.240.0/20 \
 --target-tags=bastion
-
-
-
-
