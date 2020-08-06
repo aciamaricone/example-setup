@@ -3,11 +3,7 @@ HUB_PROJECT=udl-control-hub-phase1
 CLIENT_1_PROJECT=udl-core-sandbox-1
 CLIENT_2_PROJECT=udl-core-sandbox-2
 USER1=aciamaricone@google.com
-USE_REGION=us-east1
-EUW_REGION=europe-west1
-USE_ZONE=us-east1-b
-EUW_REGION=europe-west1-b
-JENKINS_SA="$HUB_PROJECT"-jenkins-sa
+JENKINS_SA=jenkins-sa
 JENKINS_SA_FULL="$JENKINS_SA@$HUB_PROJECT.iam.gserviceaccount.com"
 
 # Pull in images to Container Registry for Hub Project

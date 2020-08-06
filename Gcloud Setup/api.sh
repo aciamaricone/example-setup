@@ -4,7 +4,6 @@ CLIENT_1_PROJECT=$2
 CLIENT_2_PROJECT=$3
 
 # Enable appropriate product APIs
-# https://cloud.google.com/endpoints/docs/openapi/enable-api
 gcloud config set project $HUB_PROJECT
 gcloud services enable \
 bigquery.googleapis.com \

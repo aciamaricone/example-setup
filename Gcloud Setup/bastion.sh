@@ -10,13 +10,21 @@ CLIENT_1_BASTION_IP="$CLIENT_1_PROJECT"-bastion-ip
 CLIENT_2_BASTION_IP="$CLIENT_2_PROJECT"-bastion-ip
 CLIENT_1_BASTION="$CLIENT_1_PROJECT"-bastion
 CLIENT_2_BASTION="$CLIENT_2_PROJECT"-bastion
-CLIENT_1_BASTION_SA="$CLIENT_1_PROJECT"-bastion-sa
-CLIENT_2_BASTION_SA="$CLIENT_2_PROJECT"-bastion-sa
+CLIENT_1_BASTION_SA=bastion-sa
+CLIENT_2_BASTION_SA=bastion-sa
 CLIENT_1_BASTION_SA_FULL="$CLIENT_1_BASTION_SA@$CLIENT_1_PROJECT.iam.gserviceaccount.com"
 CLIENT_2_BASTION_SA_FULL="$CLIENT_2_BASTION_SA@$CLIENT_2_PROJECT.iam.gserviceaccount.com"
 
-# Create Bastion Hosts and TCP load balancer for Client Projects
-# https://cloud.google.com/sdk/gcloud/reference/compute/instance-groups/managed
+# Create IAP SSH access and Bastion Host per Client Projects
+gcloud compute --project=$HUB_PROJECT firewall-rules create "bastion-ingress-22-iap" \
+--direction=INGRESS \
+--priority=1000 \
+--network=$HUB_PROJECT_VPC \
+--action=ALLOW \
+--rules=tcp:22 \
+--source-ranges=35.235.240.0/20 \
+--target-tags=bastion
+
 gcloud config set project $CLIENT_1_PROJECT
 gcloud iam service-accounts create $CLIENT_1_BASTION_SA --display-name "Bastion Service Account"
 gcloud projects add-iam-policy-binding $CLIENT_1_PROJECT \
@@ -149,13 +157,4 @@ gcloud compute --project=$HUB_PROJECT firewall-rules create "bastion-ingress-22-
 --action=ALLOW \
 --rules=tcp:22 \
 --source-ranges=198.160.103.0/24 \
---target-tags=bastion
-
-gcloud compute --project=$HUB_PROJECT firewall-rules create "bastion-ingress-22-iap" \
---direction=INGRESS \
---priority=1000 \
---network=$HUB_PROJECT_VPC \
---action=ALLOW \
---rules=tcp:22 \
---source-ranges=35.235.240.0/20 \
 --target-tags=bastion

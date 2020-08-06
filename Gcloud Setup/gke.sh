@@ -1,26 +1,19 @@
 # Variables
-HUB_PROJECT=udl-control-hub-phase1
-CLIENT_1_PROJECT=udl-core-sandbox-1
-CLIENT_2_PROJECT=udl-core-sandbox-2
-USER1=aciamaricone@google.com
-USE_REGION=us-east1
-EUW_REGION=europe-west1
-USE_ZONE=us-east1-b
-EUW_REGION=europe-west1-b
+HUB_PROJECT=$1
+CLIENT_1_PROJECT=$2
+CLIENT_2_PROJECT=$3
+USE_REGION=$4
 GKE_SA=gke-sa
 GKE_SA_FULL="$GKE_SA@$HUB_PROJECT.iam.gserviceaccount.com"
 HUB_PROJECT_CLUSTER="$HUB_PROJECT"-cluster
 GKE_DATASET=gke_usage_metering
 
 # Create Google Kubernetes Engine instance for Hub Project
-# https://cloud.google.com/sdk/gcloud/reference/container/clusters/create
 gcloud config set project $HUB_PROJECT
-
 gcloud iam service-accounts create $GKE_SA --display-name "GKE Service Account"
 gcloud projects add-iam-policy-binding $HUB_PROJECT \
 --member=serviceAccount:$GKE_SA_FULL \
 --role=roles/owner
-
 bq --location=US mk $GKE_DATASET
 
 gcloud container --project $HUB_PROJECT clusters create $HUB_PROJECT_CLUSTER \

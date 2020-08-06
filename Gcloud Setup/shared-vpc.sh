@@ -2,8 +2,8 @@
 HUB_PROJECT=$1
 CLIENT_1_PROJECT=$2
 CLIENT_2_PROJECT=$3
-USE_REGION=us-east1
-EUW_REGION=europe-west1
+USE_REGION=$4
+EUW_REGION=$5
 HUB_PROJECT_VPC="$HUB_PROJECT"-vpc
 HUB_PROJECT_SUBNET="$HUB_PROJECT"-central-subnet
 HUB_PROJECT_SUBNET_RANGE=10.1.0.0/21
@@ -12,8 +12,7 @@ CLIENT_1_PROJECT_SUBNET_RANGE=10.2.8.0/21
 CLIENT_2_PROJECT_SUBNET="$CLIENT_2_PROJECT"-central-subnet
 CLIENT_2_PROJECT_SUBNET_RANGE=10.2.16.0/21
 
-# Create Shared VPC network for Projects
-# https://cloud.google.com/vpc/docs/provisioning-shared-vpc#gcloud_1
+# Create Shared VPC network for Hub and Client Projects
 gcloud config set project $HUB_PROJECT
 y | gcloud compute firewall-rules delete default-allow-icmp
 y | gcloud compute firewall-rules delete default-allow-internal

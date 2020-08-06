@@ -15,8 +15,8 @@ https://cloud.google.com/container-registry/docs/access-control
 ## FUTURE IMPROVEMENTS
 Separate projects for anonymous and known data
 Separate project for GCR, aggregated logging
-IAP for SSH access
-HA bastion host
+HA bastion hosts per client project
+Robust Terraform scripts utilizing specific GCP modules
 
 ### Setup Steps
 1) Create two folders: one shared services, one client
@@ -28,12 +28,11 @@ HA bastion host
 7) Create necessary VPC firewall rules
 
 ### Setup Script
-In order to create the necessary POC environments, you can either execute the total script for complete creation or individual scripts.
+To create an entirely new customer, execute scripts as follows:
 ```
-Folder creation -> Project creation -> IAM creation -> Hub environment creation -> Client environment creation
+Folders -> Projects -> IAM  -> API -> Shared-VPC -> Storage -> GKE -> GCR -> Bastion -> Qubole
 ```
-This script will create all tasks detailed below in individual scripts
+Update or expand arguments.txt with the appropriate arguments (prebuilt currently so unnecessary unless changing approach)
 ```
-./setup.sh $(cat setup-arguments.txt)
+./SCRIPT_NAME.sh $(cat arguments.txt)
 ```
-Update setup-arguments.txt with appropriate arguments

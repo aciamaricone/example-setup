@@ -5,3 +5,8 @@ us-east1
 europe-west1
 us-east1-b
 europe-west1-b
+shared_services
+client_1
+client_2
+0111B9-D0C0B2-04DD65
+blake.reed@acxiom.com
