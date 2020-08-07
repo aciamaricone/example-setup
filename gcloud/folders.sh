@@ -5,7 +5,7 @@ CLIENT_2_PROJECT=$3
 SHARED_SERVICES_FOLDER=$8
 CLIENT_1_FOLDER=$9
 CLIENT_2_FOLDER=${10}
-DOMAIN=acxiom.com
+DOMAIN=${13}
 
 # Create Folders and store IDs
 ORG_ID=`gcloud organizations list | grep $DOMAIN | awk '{print $2}'`

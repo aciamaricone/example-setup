@@ -6,6 +6,7 @@ SHARED_SERVICES_FOLDER=$8
 CLIENT_1_FOLDER=$9
 CLIENT_2_FOLDER=${10}
 BILLING_ID=${11}
+DOMAIN=${13}
 
 # Create Projects
 ORG_ID=`gcloud organizations list | grep $DOMAIN | awk '{print $2}'`
