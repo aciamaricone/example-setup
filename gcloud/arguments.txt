@@ -8,6 +8,6 @@ europe-west1-b
 shared_services
 client_1
 client_2
-0111B9-D0C0B2-04DD65
-blake.reed@acxiom.com
+XXXXX-XXXXX-XXXXX
+xxx.xxx@acxiom.com
 acxiom.com
