@@ -19,38 +19,32 @@ bq --location=US mk $GKE_DATASET
 gcloud container --project $HUB_PROJECT clusters create $HUB_PROJECT_CLUSTER \
 --region $USE_REGION \
 --no-enable-basic-auth \
+--cluster-version "1.16.11-gke.5" \
 --release-channel "regular" \
---machine-type "n2-standard-2" \
+--machine-type "n1-standard-2" \
 --image-type "COS" \
 --disk-type "pd-standard" \
 --disk-size "100" \
---node-labels env=poc \
 --metadata disable-legacy-endpoints=true \
 --service-account "$GKE_SA_FULL" \
---scopes "https://www.googleapis.com/auth/cloud-platform" \
 --num-nodes "3" \
 --enable-stackdriver-kubernetes \
 --enable-ip-alias \
 --network "projects/$HUB_PROJECT/global/networks/$HUB_PROJECT_VPC" \
---subnetwork "projects/$HUB_PROJECT/regions/$REGION/subnetworks/$HUB_PROJECT_SUBNET" \
+--subnetwork "projects/$HUB_PROJECT/regions/$USE_REGION/subnetworks/$HUB_PROJECT_SUBNET" \
 --enable-intra-node-visibility \
 --default-max-pods-per-node "110" \
 --enable-autoscaling \
 --min-nodes "0" \
---max-nodes "5" \
+--max-nodes "3" \
 --no-enable-master-authorized-networks \
---addons HorizontalPodAutoscaling,HttpLoadBalancing,CloudRun,NodeLocalDNS \
+--addons HorizontalPodAutoscaling,HttpLoadBalancing \
 --enable-autoupgrade \
 --enable-autorepair \
---max-surge-upgrade 2 \
+--max-surge-upgrade 1 \
 --max-unavailable-upgrade 0 \
---maintenance-window-start "2020-07-08T06:00:00Z" \
---maintenance-window-end "2020-07-09T06:00:00Z" \
---maintenance-window-recurrence "FREQ=WEEKLY;BYDAY=SA,SU" \
---enable-vertical-pod-autoscaling \
---resource-usage-bigquery-dataset $GKE_DATASET \
+--resource-usage-bigquery-dataset "$GKE_DATASET" \
 --enable-network-egress-metering \
---enable-resource-consumption-metering \
---identity-namespace "$HUB_PROJECT.svc.id.goog" \
---enable-shielded-nodes \
---shielded-secure-boot
+--enable-resource-consumption-metering
+
+
