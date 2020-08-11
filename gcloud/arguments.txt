@@ -11,3 +11,4 @@ client_2
 XXXXX-XXXXX-XXXXX
 xxx.xxx@acxiom.com
 acxiom.com
+public_key.pub

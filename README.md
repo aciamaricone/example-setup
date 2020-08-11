@@ -1,13 +1,6 @@
 # UDL-POC
 
 ## TO DO
-VPN and Qubole ssh keys
-- Create startup scripts
-https://cloud.google.com/compute/docs/startupscript
-https://docs-gcp.qubole.com/en/latest/admin-guide/cluster-admin/private-subnet-gcp.html
-
-Include IAM conditions
-
 Continuous deployment for GKE from GCR
 - SA creation for multiple project access
 https://cloud.google.com/container-registry/docs/access-control
@@ -17,6 +10,7 @@ Separate projects for anonymous and known data
 Separate project for GCR, aggregated logging
 HA bastion hosts per client project
 Robust Terraform scripts utilizing specific GCP modules
+Build VPC model (hub and spoke) for mass scale
 
 ### Setup Steps
 1) Create two folders: one shared services, one client
@@ -30,7 +24,7 @@ Robust Terraform scripts utilizing specific GCP modules
 ### Setup Script
 To create an entirely new customer, execute scripts as follows:
 ```
-Folders -> Projects -> IAM  -> API -> Shared-VPC -> Storage -> GKE -> GCR -> Bastion -> Qubole
+Folders -> Projects -> API -> Shared-VPC -> Storage -> GKE -> GCR -> Bastion -> IAM -> Qubole
 ```
 Update or expand arguments.txt with the appropriate arguments (prebuilt currently so unnecessary unless changing approach)
 ```

@@ -6,6 +6,7 @@ USE_REGION=$4
 EUW_REGION=$5
 USE_ZONE=$6
 EUW_ZONE=$7
+PUBLIC_KEY=${14}
 HUB_PROJECT_VPC="$HUB_PROJECT"-vpc
 HUB_PROJECT_SUBNET="$HUB_PROJECT"-central-subnet
 HUB_PROJECT_SUBNET_RANGE=10.1.0.0/21
@@ -21,6 +22,10 @@ CLIENT_1_BASTION_SA=bastion-sa
 CLIENT_2_BASTION_SA=bastion-sa
 CLIENT_1_BASTION_SA_FULL="$CLIENT_1_BASTION_SA@$CLIENT_1_PROJECT.iam.gserviceaccount.com"
 CLIENT_2_BASTION_SA_FULL="$CLIENT_2_BASTION_SA@$CLIENT_2_PROJECT.iam.gserviceaccount.com"
+SSH_KEY_1_CLIENT_1_PWD=${14}
+SSH_KEY_2_CLIENT_1_PWD=${14}
+SSH_KEY_1_CLIENT_2_PWD=${14}
+SSH_KEY_2_CLIENT_2_PWD=${14}
 
 # Create IAP SSH access and Bastion Host per Client Projects
 gcloud config set project $CLIENT_1_PROJECT
@@ -39,6 +44,8 @@ gcloud compute --project=$CLIENT_1_PROJECT instances create $CLIENT_1_BASTION \
 --subnet=$CLIENT_1_GCE_SUBNET \
 --address="$CLIENT_1_BASTION_IP_ADDRESS" \
 --network-tier=PREMIUM \
+--metadata=enable-oslogin=TRUE \
+--metadata-from-file startup-script=/home/$USER/bastion-startup-script.sh \
 --maintenance-policy=MIGRATE \
 --service-account=$CLIENT_1_BASTION_SA_FULL \
 --scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append \
@@ -69,6 +76,8 @@ gcloud compute --project=$CLIENT_2_PROJECT instances create $CLIENT_2_BASTION \
 --subnet=$CLIENT_2_GCE_SUBNET \
 --address=$CLIENT_2_BASTION_IP_ADDRESS \
 --network-tier=PREMIUM \
+--metadata=enable-oslogin=TRUE \
+--metadata-from-file startup-script=/home/$USER/bastion-startup-script.sh \
 --maintenance-policy=MIGRATE \
 --service-account=$CLIENT_2_BASTION_SA_FULL \
 --scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append \
@@ -83,7 +92,7 @@ gcloud compute --project=$CLIENT_2_PROJECT instances create $CLIENT_2_BASTION \
 --shielded-integrity-monitoring \
 --reservation-affinity=any
 
-gcloud compute --project=$HUB_PROJECT firewall-rules create "bastion-ingress-tcp -iap" \
+gcloud compute --project=$HUB_PROJECT firewall-rules create "bastion-ingress-tcp-iap" \
 --direction=INGRESS \
 --priority=1000 \
 --network=$HUB_PROJECT_VPC \
@@ -132,3 +141,7 @@ gcloud compute --project=$HUB_PROJECT firewall-rules create "bastion-ingress-22-
 --source-ranges=198.160.103.0/24 \
 --target-tags=bastion \
 --enable-logging
+
+# Generate Public and Private key and store in .ssh of User home directory in Cloud Shell
+gcloud compute os-login ssh-keys add \
+--key-file /home/$USER/.ssh/$PUBLIC_KEY

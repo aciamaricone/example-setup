@@ -11,8 +11,8 @@ DOMAIN=${13}
 # Create Projects
 ORG_ID=`gcloud organizations list | grep $DOMAIN | awk '{print $2}'`
 SHARED_SERVICES_FOLDER_ID=`gcloud alpha resource-manager folders list --organization=$ORG_ID | grep $SHARED_SERVICES_FOLDER | awk '{print $3}'`
-CLIENT_1_FOLDER_ID=`gcloud alpha resource-manager folders list --organization=$ORG_ID | grep $CLIENT_1_PROJECT | awk '{print $3}'`
-CLIENT_2_FOLDER_ID=`gcloud alpha resource-manager folders list --organization=$ORG_ID | grep $CLIENT_2_PROJECT | awk '{print $3}'` 
+CLIENT_1_FOLDER_ID=`gcloud alpha resource-manager folders list --organization=$ORG_ID | grep $CLIENT_1_FOLDER | awk '{print $3}'`
+CLIENT_2_FOLDER_ID=`gcloud alpha resource-manager folders list --organization=$ORG_ID | grep $CLIENT_2_FOLDER | awk '{print $3}'` 
 
 gcloud projects create $HUB_PROJECT \
 --folder=$SHARED_SERVICES_FOLDER_ID

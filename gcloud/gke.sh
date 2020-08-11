@@ -6,6 +6,8 @@ USE_REGION=$4
 GKE_SA=gke-sa
 GKE_SA_FULL="$GKE_SA@$HUB_PROJECT.iam.gserviceaccount.com"
 HUB_PROJECT_CLUSTER="$HUB_PROJECT"-cluster
+HUB_PROJECT_VPC="$HUB_PROJECT"-vpc
+HUB_PROJECT_SUBNET="$HUB_PROJECT"-central-subnet
 GKE_DATASET=gke_usage_metering
 
 # Create Google Kubernetes Engine instance for Hub Project
@@ -26,8 +28,8 @@ gcloud container --project $HUB_PROJECT clusters create $HUB_PROJECT_CLUSTER \
 --disk-type "pd-standard" \
 --disk-size "100" \
 --metadata disable-legacy-endpoints=true \
---service-account "$GKE_SA_FULL" \
---num-nodes "3" \
+--service-account $GKE_SA_FULL \
+--num-nodes "1" \
 --enable-stackdriver-kubernetes \
 --enable-ip-alias \
 --network "projects/$HUB_PROJECT/global/networks/$HUB_PROJECT_VPC" \
@@ -43,8 +45,6 @@ gcloud container --project $HUB_PROJECT clusters create $HUB_PROJECT_CLUSTER \
 --enable-autorepair \
 --max-surge-upgrade 1 \
 --max-unavailable-upgrade 0 \
---resource-usage-bigquery-dataset "$GKE_DATASET" \
+--resource-usage-bigquery-dataset $GKE_DATASET \
 --enable-network-egress-metering \
 --enable-resource-consumption-metering
-
-
