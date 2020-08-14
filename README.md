@@ -24,7 +24,7 @@ Build VPC model (hub and spoke) for mass scale
 ### Setup Script
 To create an entirely new customer, execute scripts as follows:
 ```
-Folders -> Projects -> API -> Shared-VPC -> Storage -> GKE -> GCR -> Bastion -> IAM -> Qubole
+Folders -> Projects -> API -> Shared-VPC -> Storage -> GKE -> GCR -> Bastion -> USER-IAM -> Qubole
 ```
 Update or expand arguments.txt with the appropriate arguments (prebuilt currently so unnecessary unless changing approach)
 ```

@@ -14,7 +14,6 @@ CLIENT_2_ACTIVATED_SB_2="$CLIENT_2_PROJECT"_activated
 CLIENT_2_QUBOLE_SB_2="$CLIENT_2_PROJECT"_qubole
 CLIENT_2_EXTRACTION_SB="$CLIENT_2_PROJECT"_extraction
 
-
 # Assign Project Owner roles in order to enable ease of use for evaluation
 # https://cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding
 gcloud projects add-iam-policy-binding $HUB_PROJECT \
