@@ -15,6 +15,9 @@ gcloud iam service-accounts create $GKE_SA --display-name "GKE Service Account"
 gcloud projects add-iam-policy-binding $HUB_PROJECT \
 --member=serviceAccount:$GKE_SA_FULL \
 --role=roles/owner
+gcloud projects add-iam-policy-binding $HUB_PROJECT \
+--member=serviceAccount:$GKE_SA_FULL \
+--role=roles/container.developer
 bq --location=US mk $GKE_DATASET
 
 gcloud container --project $HUB_PROJECT clusters create $HUB_PROJECT_CLUSTER \
