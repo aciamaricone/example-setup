@@ -6,7 +6,6 @@ QUBOLE_CLIENT_1_SA=qubole-sa
 QUBOLE_CLIENT_1_SA_FULL="$QUBOLE_CLIENT_1_SA@$CLIENT_1_PROJECT.iam.gserviceaccount.com"
 QUBOLE_CLIENT_2_SA=qubole-sa
 QUBOLE_CLIENT_2_SA_FULL="$QUBOLE_CLIENT_2_SA@$CLIENT_2_PROJECT.iam.gserviceaccount.com"
-QUBOLE_PREMADE_SA_FULL=
 
 # Create Qubole Service Accounts for Client Projects
 # https://docs-gcp.qubole.com/en/latest/quick-start-guide/GCP-quick-start-guide/setup_procedures/automated_setup.html

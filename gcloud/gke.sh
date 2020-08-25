@@ -51,10 +51,7 @@ gcloud container --project $HUB_PROJECT clusters create $HUB_PROJECT_CLUSTER \
 --enable-network-egress-metering \
 --enable-resource-consumption-metering
 
-
-
-
-
+# Or a private cluster
 gcloud beta container --project $HUB_PROJECT clusters create $HUB_PROJECT_CLUSTER-3 \
 --region $USE_REGION \
 --no-enable-basic-auth \

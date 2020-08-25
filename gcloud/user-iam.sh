@@ -15,7 +15,6 @@ CLIENT_2_QUBOLE_SB_2="$CLIENT_2_PROJECT"_qubole
 CLIENT_2_EXTRACTION_SB="$CLIENT_2_PROJECT"_extraction
 
 # Assign Project Owner roles in order to enable ease of use for evaluation
-# https://cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding
 gcloud projects add-iam-policy-binding $HUB_PROJECT \
 --member=user:$USER1 \
 --role=roles/owner
@@ -29,7 +28,6 @@ gcloud projects add-iam-policy-binding $CLIENT_2_PROJECT \
 --role=roles/owner
 
 # Assign conditional IAM policies to GCS objects
-# https://cloud.google.com/iam/docs/conditions-overview
 gcloud projects add-iam-policy-binding $CLIENT_1_PROJECT \
 --member user:$USER1 \
 --role=roles/storage.objectViewer \

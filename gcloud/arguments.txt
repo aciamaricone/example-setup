@@ -1,15 +1,14 @@
-udl-control-hub-phase1
-udl-core-sandbox-1
-udl-core-sandbox-2
-us-east1
-europe-west1
-us-east1-b
-europe-west1-b
-shared_services
-client_1
-client_2
-XXXXX-XXXXX-XXXXX
-xxx.xxx@acxiom.com
-acxiom.com
-public_key.pub
-qbol-1328-gcp@prod-qsa-project-1.iam.gserviceaccount.com
+hub project name
+client 1 project name
+client 2 project name
+US region
+EU region
+US zone
+EU zone
+folder name
+client 1 folder name
+client 2 folder name
+billing account ID
+user 1 email address
+domain
+Qubole service account address
