@@ -1,10 +1,5 @@
 # UDL-POC
 
-## TO DO
-Continuous deployment for GKE from GCR
-- SA creation for multiple project access
-https://cloud.google.com/container-registry/docs/access-control
-
 ## FUTURE IMPROVEMENTS
 Separate projects for anonymous and known data
 Separate project for GCR, aggregated logging
