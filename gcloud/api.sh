@@ -8,6 +8,7 @@ gcloud config set project $HUB_PROJECT
 gcloud services enable \
 bigquery.googleapis.com \
 bigquerystorage.googleapis.com \
+cloudbilling.googleapis.com \
 cloudresourcemanager.googleapis.com \
 compute.googleapis.com \
 container.googleapis.com \
@@ -22,6 +23,7 @@ gcloud config set project $CLIENT_1_PROJECT
 gcloud services enable \
 bigquery.googleapis.com \
 bigquerystorage.googleapis.com \
+cloudbilling.googleapis.com \
 cloudresourcemanager.googleapis.com \
 compute.googleapis.com \
 iam.googleapis.com \
@@ -35,6 +37,7 @@ gcloud config set project $CLIENT_2_PROJECT
 gcloud services enable \
 bigquery.googleapis.com \
 bigquerystorage.googleapis.com \
+cloudbilling.googleapis.com \
 cloudresourcemanager.googleapis.com \
 compute.googleapis.com \
 iam.googleapis.com \
